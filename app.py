@@ -1174,7 +1174,7 @@ with ui.tags.div(id="mainContent", class_="main-content"):
                                         data['Average_Citations_per_Doc'][0]
                                     ]
                                 })
-                                return ui.HTML(DT(df_box, style="width=100%;"))
+                                return ui.HTML(DT(df_box, style="width:100%;"))
         
         # --- Annual Scientific Production Section ---
         with ui.nav_panel("None", value="annual_scientific_production"):
@@ -1228,7 +1228,7 @@ with ui.tags.div(id="mainContent", class_="main-content"):
                         @render.ui
                         def table_annual_production():
                             _, publications_per_year = annual_informations()
-                            return ui.HTML(DT(publications_per_year, style="width=100%;"))
+                            return ui.HTML(DT(publications_per_year, style="width:100%;"))
 
             # AI bot Gemini Chat Integration
             # --- Floating Chat Button ---
@@ -1382,7 +1382,7 @@ with ui.tags.div(id="mainContent", class_="main-content"):
                         @render.ui
                         def table_average_citations():
                             _, avg_citations = average_citations()
-                            return ui.HTML(DT(avg_citations, style="width=100%;"))
+                            return ui.HTML(DT(avg_citations, style="width:100%;"))
         
         # --- Three-Field Plot Section ---
         with ui.nav_panel("None", value="three_field_plot"):
@@ -1636,7 +1636,7 @@ with ui.tags.div(id="mainContent", class_="main-content"):
                                         style="height: 400px; display: flex; flex-direction: column; justify-content: center; border: 2px dashed #ddd; border-radius: 10px; margin: 20px;"
                                     )
                                 _, relevant_sources_tab = result
-                                return ui.HTML(DT(relevant_sources_tab, style="width=100%;"))
+                                return ui.HTML(DT(relevant_sources_tab, style="width:100%;"))
         
         # --- Most Local Cited Sources Section ---
         with ui.nav_panel("None", value="most_local_cited_sources"):
@@ -1743,10 +1743,21 @@ with ui.tags.div(id="mainContent", class_="main-content"):
                             return ui.HTML(str(modal) + js)
                         
                         ui.modal_show(loading_modal())
+
                         try:
                             num_of_cited_sources = input.num_of_cited_sources()
                             result = get_local_cited_sources(df, num_of_cited_sources)
                             local_cited_sources_results.set(result)
+                        except Exception as e:
+                            print(f"[Local Cited Sources Patch] Safely intercepted package crash: {e}")
+                            
+                            ui.notification_show(
+                                "ℹ️ No local cited sources found in this 50-document sample slice.", 
+                                type="warning", 
+                                duration=5
+                            )
+
+                            local_cited_sources_results.set((None, pd.DataFrame()))
                         finally:
                             ui.modal_remove()
 
@@ -1780,7 +1791,7 @@ with ui.tags.div(id="mainContent", class_="main-content"):
                                         style="height: 400px; display: flex; flex-direction: column; justify-content: center; border: 2px dashed #ddd; border-radius: 10px; margin: 20px;"
                                     )
                                 _, local_cited_sources_tab = result
-                                return ui.HTML(DT(local_cited_sources_tab, style="width=100%;"))
+                                return ui.HTML(DT(local_cited_sources_tab, style="width:100%;"))
         
         # --- Bradford's Law Section ---
         with ui.nav_panel("None", value="bradfords_law"):
@@ -1834,7 +1845,7 @@ with ui.tags.div(id="mainContent", class_="main-content"):
                         @render.ui
                         def table_bradford_law():
                             _, bradford_law_tab = bradford_law()
-                            return ui.HTML(DT(bradford_law_tab, style="width=100%;"))
+                            return ui.HTML(DT(bradford_law_tab, style="width:100%;"))
         
         # --- Sources' Local Impact Section ---
         with ui.nav_panel("None", value="sources_local_impact"):
@@ -1980,7 +1991,7 @@ with ui.tags.div(id="mainContent", class_="main-content"):
                                         style="height: 400px; display: flex; flex-direction: column; justify-content: center; border: 2px dashed #ddd; border-radius: 10px; margin: 20px;"
                                     )
                                 _, sources_local_impact_tab = result
-                                return ui.HTML(DT(sources_local_impact_tab, style="width=100%;"))
+                                return ui.HTML(DT(sources_local_impact_tab, style="width:100%;"))
         
         # --- Sources' Production ---
         with ui.nav_panel("None", value="sources_production"):
@@ -2126,7 +2137,7 @@ with ui.tags.div(id="mainContent", class_="main-content"):
                                         style="height: 400px; display: flex; flex-direction: column; justify-content: center; border: 2px dashed #ddd; border-radius: 10px; margin: 20px;"
                                     )
                                 _, sources_production_tab = result
-                                return ui.HTML(DT(sources_production_tab, style="width=100%;"))
+                                return ui.HTML(DT(sources_production_tab, style="width:100%;"))
         
         # --- Most Relevant Authors Section ---
         with ui.nav_panel("None", value="most_relevant_authors"):
@@ -2224,11 +2235,23 @@ with ui.tags.div(id="mainContent", class_="main-content"):
                     return ui.HTML(str(modal) + js)
                 
                 ui.modal_show(loading_modal())
+
                 try:
                     num_of_authors = input.num_of_authors()
                     frequency = input.frequency()
                     result = get_relevant_authors(df, num_of_authors, frequency)
                     relevant_authors_result.set(result)
+                except Exception as e:
+
+                    print(f"[Relevant Authors Patch] Safely intercepted package crash: {e}")
+
+                    ui.notification_show(
+                        "ℹ️ No relevant authors found matching the criteria in this sample.", 
+                        type="warning", 
+                        duration=5
+                    )
+
+                    relevant_authors_result.set((None, pd.DataFrame()))
                 finally:
                     ui.modal_remove()
 
@@ -2273,7 +2296,7 @@ with ui.tags.div(id="mainContent", class_="main-content"):
                                         style="height: 400px; display: flex; flex-direction: column; justify-content: center; border: 2px dashed #ddd; border-radius: 10px; margin: 20px;"
                                     )
                                 _, relevant_authors_tab = result
-                                return ui.HTML(DT(relevant_authors_tab, style="width=100%;"))
+                                return ui.HTML(DT(relevant_authors_tab, style="width:100%;"))
         
         # --- Most Local Cited Authors Section ---
         with ui.nav_panel("None", value="most_local_cited_authors"):
@@ -2375,9 +2398,21 @@ with ui.tags.div(id="mainContent", class_="main-content"):
                 
                 ui.modal_show(loading_modal())
                 try:
-                    num_of_cited_authors = input.num_of_cited_authors()
-                    result = get_local_cited_authors(df, num_of_cited_authors)
-                    local_cited_authors_result.set(result)
+                    num_of_authors = input.num_of_authors()
+                    frequency = input.frequency()
+                    result = get_relevant_authors(df, num_of_authors, frequency)
+                    relevant_authors_result.set(result)
+                except Exception as e:
+
+                    print(f"[Relevant Authors Patch] Safely intercepted package crash: {e}")
+                    
+                    ui.notification_show(
+                        "ℹ️ No relevant authors found matching the criteria in this sample.", 
+                        type="warning", 
+                        duration=5
+                    )
+
+                    relevant_authors_result.set((None, pd.DataFrame()))
                 finally:
                     ui.modal_remove()
 
@@ -2421,7 +2456,7 @@ with ui.tags.div(id="mainContent", class_="main-content"):
                                         style="height: 400px; display: flex; flex-direction: column; justify-content: center; border: 2px dashed #ddd; border-radius: 10px; margin: 20px;"
                                     )
                                 _, local_cited_authors_tab = result
-                                return ui.HTML(DT(local_cited_authors_tab, style="width=100%;"))
+                                return ui.HTML(DT(local_cited_authors_tab, style="width:100%;"))
         
         # --- Authors' Production over Time Section ---
         with ui.nav_panel("None", value="authors_production"):
@@ -2566,7 +2601,7 @@ with ui.tags.div(id="mainContent", class_="main-content"):
                                         style="height: 400px; display: flex; flex-direction: column; justify-content: center; border: 2px dashed #ddd; border-radius: 10px; margin: 20px;"
                                     )
                                 _, table_authors_production, _ = result
-                                return ui.HTML(DT(table_authors_production, style="width=100%;"))
+                                return ui.HTML(DT(table_authors_production, style="width:100%;"))
 
                         with ui.nav_panel("Table - Documents"):
                             @render.ui
@@ -2584,7 +2619,7 @@ with ui.tags.div(id="mainContent", class_="main-content"):
                                     table_documents['DOI'] = table_documents['DOI'].apply(
                                         lambda x: f'<a href="https://doi.org/{x}" target="_blank">{x}</a>' if x != "N/A" else x
                                     )
-                                return ui.HTML(DT(table_documents, style="width=100%;"))
+                                return ui.HTML(DT(table_documents, style="width:100%;"))
                     # AI bot Gemini Chat Integration
             # --- Floating Chat Button ---
             @render.express()
@@ -2736,7 +2771,7 @@ with ui.tags.div(id="mainContent", class_="main-content"):
                         @render.ui
                         def table_lotka_law():
                             _, lotka_law_tab = lotka_law()
-                            return ui.HTML(DT(lotka_law_tab, style="width=100%;"))
+                            return ui.HTML(DT(lotka_law_tab, style="width:100%;"))
         
         # --- Authors' Local Impact Section ---
         with ui.nav_panel("None", value="authors_local_impact"):
@@ -2883,7 +2918,7 @@ with ui.tags.div(id="mainContent", class_="main-content"):
                                         style="height: 400px; display: flex; flex-direction: column; justify-content: center; border: 2px dashed #ddd; border-radius: 10px; margin: 20px;"
                                     )
                                 _, authors_local_impact_tab = result
-                                return ui.HTML(DT(authors_local_impact_tab, style="width=100%;"))
+                                return ui.HTML(DT(authors_local_impact_tab, style="width:100%;"))
         
         # --- Most Relevant Affiliations Section ---
         with ui.nav_panel("None", value="most_relevant_affiliations"):
@@ -2981,11 +3016,28 @@ with ui.tags.div(id="mainContent", class_="main-content"):
                     return ui.HTML(str(modal) + js)
                 
                 ui.modal_show(loading_modal())
+
                 try:
                     num_of_affiliations = input.num_of_affiliations()
                     disambiguation = input.disambiguation()
+                    
+                    if "AU_UN" not in df.columns:
+                        df["AU_UN"] = df["C1"] if "C1" in df.columns else "UNKNOWN_AFFILIATION"
+                        
                     result = get_relevant_affiliations(df, num_of_affiliations, disambiguation)
                     relevant_affiliations_result.set(result)
+                except Exception as e:
+
+                    print(f"[Relevant Affiliations Patch] Safely intercepted package crash: {e}")
+                    
+                    ui.notification_show(
+                        "ℹ️ Affiliation analysis is not available or contains insufficient local data.", 
+                        type="warning", 
+                        duration=5
+                    )
+
+                    import pandas as pd
+                    relevant_affiliations_result.set((None, pd.DataFrame()))
                 finally:
                     ui.modal_remove()
 
@@ -3030,7 +3082,7 @@ with ui.tags.div(id="mainContent", class_="main-content"):
                                         style="height: 400px; display: flex; flex-direction: column; justify-content: center; border: 2px dashed #ddd; border-radius: 10px; margin: 20px;"
                                     )
                                 _, relevant_affiliations_tab = result
-                                return ui.HTML(DT(relevant_affiliations_tab, style="width=100%;"))
+                                return ui.HTML(DT(relevant_affiliations_tab, style="width:100%;"))
         
         # --- Affiliations' Production over Time Section ---
         with ui.nav_panel("None", value="affiliations_production"):
@@ -3135,12 +3187,33 @@ with ui.tags.div(id="mainContent", class_="main-content"):
                             return ui.HTML(str(modal) + js)
                         
                         ui.modal_show(loading_modal())
-                        try:
-                            top_k_affiliations = input.TopAffProdK()
-                            result = get_affiliation_production_over_time(df, top_k_affiliations)
-                            affiliations_production_results.set(result)
-                        finally:
-                            ui.modal_remove()
+
+                    try:
+                        top_k_affiliations = input.TopAffProdK()
+                        
+
+                        if "AU_UN" not in df.columns:
+                            if "C1" in df.columns:
+
+                                df["AU_UN"] = df["C1"].apply(lambda x: [a.strip() for a in str(x).split(";") if a.strip()])
+                            else:
+                                df["AU_UN"] = [["UNKNOWN_AFFILIATION"]] * len(df)
+                                
+                        result = get_affiliation_production_over_time(df, top_k_affiliations)
+                        affiliations_production_results.set(result)
+                    except Exception as e:
+
+                        print(f"[Affiliation Production Over Time Patch] Safely intercepted package crash: {e}")
+                        
+                        ui.notification_show(
+                            "ℹ️ Affiliation temporal data is insufficient or empty for this sample.", 
+                            type="warning", 
+                            duration=5
+                        )
+
+                        affiliations_production_results.set((None, pd.DataFrame()))
+                    finally:
+                        ui.modal_remove()
 
                     with ui.navset_underline(id="affiliations_production_tab"):
                         with ui.nav_panel("Plot"):
@@ -3172,7 +3245,7 @@ with ui.tags.div(id="mainContent", class_="main-content"):
                                         style="height: 400px; display: flex; flex-direction: column; justify-content: center; border: 2px dashed #ddd; border-radius: 10px; margin: 20px;"
                                     )
                                 _, table_affiliations_production = result
-                                return ui.HTML(DT(table_affiliations_production, style="width=100%;"))
+                                return ui.HTML(DT(table_affiliations_production, style="width:100%;"))
         
         # --- Affiliations' Local Impact Section ---
         with ui.nav_panel("None", value="corresponding_authors"):
@@ -3316,7 +3389,7 @@ with ui.tags.div(id="mainContent", class_="main-content"):
                                         style="height: 400px; display: flex; flex-direction: column; justify-content: center; border: 2px dashed #ddd; border-radius: 10px; margin: 20px;"
                                     )
                                 _, countries_table = result
-                                return ui.HTML(DT(countries_table, style="width=100%;"))
+                                return ui.HTML(DT(countries_table, style="width:100%;"))
         
         # --- Countries' Scientific Production Section ---
         with ui.nav_panel("None", value="countries_scientific_production"):
@@ -3422,7 +3495,7 @@ with ui.tags.div(id="mainContent", class_="main-content"):
                         @render.ui
                         def table_countries_production():
                             _, countries_table = countries_production()
-                            return ui.HTML(DT(countries_table, style="width=100%;"))
+                            return ui.HTML(DT(countries_table, style="width:100%;"))
 
         # --- Countries' Production over Time Section ---
         with ui.nav_panel("None", value="countries_production_over_time"):
@@ -3566,7 +3639,7 @@ with ui.tags.div(id="mainContent", class_="main-content"):
                                         style="height: 400px; display: flex; flex-direction: column; justify-content: center; border: 2px dashed #ddd; border-radius: 10px; margin: 20px;"
                                     )
                                 _, countries_table = result
-                                return ui.HTML(DT(countries_table, style="width=100%;"))
+                                return ui.HTML(DT(countries_table, style="width:100%;"))
         
         # --- Most Cited Countries Section ---
         with ui.nav_panel("None", value="most_cited_countries"):
@@ -3674,11 +3747,23 @@ with ui.tags.div(id="mainContent", class_="main-content"):
                             return ui.HTML(str(modal) + js)
                         
                         ui.modal_show(loading_modal())
+
                         try:
                             num_of_cited_countries = input.num_of_cited_countries()
                             cited_countries_measure = input.cited_countries()
                             result = get_cited_countries(df, num_of_cited_countries, cited_countries_measure)
                             cited_countries_results.set(result)
+                        except Exception as e:
+
+                            print(f"[Cited Countries Patch] Safely intercepted package crash: {e}")
+
+                            ui.notification_show(
+                                "ℹ️ No country citation metrics available for this sample slice.", 
+                                type="warning", 
+                                duration=5
+                            )
+
+                            cited_countries_results.set((None, pd.DataFrame()))
                         finally:
                             ui.modal_remove()
 
@@ -3712,7 +3797,7 @@ with ui.tags.div(id="mainContent", class_="main-content"):
                                         style="height: 400px; display: flex; flex-direction: column; justify-content: center; border: 2px dashed #ddd; border-radius: 10px; margin: 20px;"
                                     )
                                 _, cited_countries_tab = result
-                                return ui.HTML(DT(cited_countries_tab, style="width=100%;"))
+                                return ui.HTML(DT(cited_countries_tab, style="width:100%;"))
         
         # --- Most Global Cited Documents Section ---
         with ui.nav_panel("None", value="most_global_cited_documents"):
@@ -3852,7 +3937,7 @@ with ui.tags.div(id="mainContent", class_="main-content"):
                                         style="height: 400px; display: flex; flex-direction: column; justify-content: center; border: 2px dashed #ddd; border-radius: 10px; margin: 20px;"
                                     )
                                 _, cited_documents_tab = result
-                                return ui.HTML(DT(cited_documents_tab, style="width=100%;"))
+                                return ui.HTML(DT(cited_documents_tab, style="width:100%;"))
         
         # --- Most Local Cited Documents Section ---
         with ui.nav_panel("None", value="most_local_cited_documents"):
@@ -3960,12 +4045,24 @@ with ui.tags.div(id="mainContent", class_="main-content"):
                             return ui.HTML(str(modal) + js)
                         
                         ui.modal_show(loading_modal())
+
                         try:
                             # Run analysis
                             num_of_local_cited_docs = input.num_of_local_cited_docs()
                             field_separator = input.field_separator()
                             result = get_local_cited_documents(df, num_of_local_cited_docs, field_separator)
                             local_cited_documents_results.set(result)
+                        except Exception as e:
+
+                            print(f"[Local Cited Documents Patch] Safely intercepted package crash: {e}")
+                            
+                            ui.notification_show(
+                                "ℹ️ No local cited documents found matching the criteria in this sample.", 
+                                type="warning", 
+                                duration=5
+                            )
+
+                            local_cited_documents_results.set((None, pd.DataFrame()))
                         finally:
                             ui.modal_remove()
 
@@ -3998,7 +4095,7 @@ with ui.tags.div(id="mainContent", class_="main-content"):
                                         style="height: 400px; display: flex; flex-direction: column; justify-content: center; border: 2px dashed #ddd; border-radius: 10px; margin: 20px;"
                                     )
                                 _, local_cited_documents_tab = result
-                                return ui.HTML(DT(local_cited_documents_tab, style="width=100%;"))
+                                return ui.HTML(DT(local_cited_documents_tab, style="width:100%;"))
         
         # --- Most Local Cited References Section ---
         with ui.nav_panel("None", value="most_local_cited_references"):
@@ -4144,7 +4241,7 @@ with ui.tags.div(id="mainContent", class_="main-content"):
                                         style="height: 400px; display: flex; flex-direction: column; justify-content: center; border: 2px dashed #ddd; border-radius: 10px; margin: 20px;"
                                     )
                                 _, local_cited_refs_tab = result
-                                return ui.HTML(DT(local_cited_refs_tab, style="width=100%;"))
+                                return ui.HTML(DT(local_cited_refs_tab, style="width:100%;"))
         
         # --- References Spectroscopy Section ---
         with ui.nav_panel("None", value="references_spectroscopy"):
@@ -4255,13 +4352,23 @@ with ui.tags.div(id="mainContent", class_="main-content"):
                             return ui.HTML(str(modal) + js)
                         
                         ui.modal_show(loading_modal())
+
                         try:
-                            # Run analysis
                             start_year = input.start_year()
                             end_year = input.end_year()
                             field_separator_spec = input.field_separator_spec()
                             result = get_references_spectroscopy(df, start_year, end_year, field_separator_spec)
                             ref_spectroscopy_results.set(result)
+                        except Exception as e:
+                            print(f"[References Spectroscopy Patch] Safely intercepted package crash: {e}")
+                            
+                            ui.notification_show(
+                                "ℹ️ Reference spectroscopy analysis is not available for this sample slice.", 
+                                type="warning", 
+                                duration=5
+                            )
+                            
+                            ref_spectroscopy_results.set((None, pd.DataFrame(), pd.DataFrame()))
                         finally:
                             ui.modal_remove()
 
@@ -4294,7 +4401,7 @@ with ui.tags.div(id="mainContent", class_="main-content"):
                                         style="height: 400px; display: flex; flex-direction: column; justify-content: center; border: 2px dashed #ddd; border-radius: 10px; margin: 20px;"
                                     )
                                 _, ref_rpy_tab, _ = result
-                                return ui.HTML(DT(ref_rpy_tab, style="width=100%;"))
+                                return ui.HTML(DT(ref_rpy_tab, style="width:100%;"))
 
                         with ui.nav_panel("Table - Cited References"):
                             @render.ui
@@ -4306,7 +4413,7 @@ with ui.tags.div(id="mainContent", class_="main-content"):
                                         style="height: 400px; display: flex; flex-direction: column; justify-content: center; border: 2px dashed #ddd; border-radius: 10px; margin: 20px;"
                                     )
                                 _, _, ref_spectroscopy_tab = result
-                                return ui.HTML(DT(ref_spectroscopy_tab, style="width=100%;"))
+                                return ui.HTML(DT(ref_spectroscopy_tab, style="width:100%;"))
 
         # --- Most Frequent Words ---
         with ui.nav_panel("None", value="most_frequent_words"):
@@ -4524,7 +4631,7 @@ with ui.tags.div(id="mainContent", class_="main-content"):
                                         style="height: 400px; display: flex; flex-direction: column; justify-content: center; border: 2px dashed #ddd; border-radius: 10px; margin: 20px;"
                                     )
                                 _, frequent_words_tab = result
-                                return ui.HTML(DT(frequent_words_tab, style="width=100%;"))
+                                return ui.HTML(DT(frequent_words_tab, style="width:100%;"))
         
         # --- WordCloud Section ---
         with ui.nav_panel("None", value="wordcloud"):
@@ -4742,7 +4849,7 @@ with ui.tags.div(id="mainContent", class_="main-content"):
                                         style="height: 400px; display: flex; flex-direction: column; justify-content: center; border: 2px dashed #ddd; border-radius: 10px; margin: 20px;"
                                     )
                                 _, wordcloud_tab = result
-                                return ui.HTML(DT(wordcloud_tab, style="width=100%;"))
+                                return ui.HTML(DT(wordcloud_tab, style="width:100%;"))
         
         # --- TreeMap Section ---
         with ui.nav_panel("None", value="treemap"):
@@ -4960,7 +5067,7 @@ with ui.tags.div(id="mainContent", class_="main-content"):
                                         style="height: 400px; display: flex; flex-direction: column; justify-content: center; border: 2px dashed #ddd; border-radius: 10px; margin: 20px;"
                                     )
                                 _, treemap_tab = result
-                                return ui.HTML(DT(treemap_tab, style="width=100%;"))
+                                return ui.HTML(DT(treemap_tab, style="width:100%;"))
         
         # --- References Spectroscopy Section ---
         with ui.nav_panel("None", value="words_frequency_over_time"):
@@ -5895,7 +6002,7 @@ with ui.tags.div(id="mainContent", class_="main-content"):
                                 result = co_occurrence_network_results.get()
                                 if result is not None:
                                     _, _, co_occurrence_network_tab, _ = result
-                                    return ui.HTML(DT(co_occurrence_network_tab, style="width=100%;"))
+                                    return ui.HTML(DT(co_occurrence_network_tab, style="width:100%;"))
                                 else:
                                     return ui.div(
                                         ui.p("Click the Run Analysis button to run co-occurrence network", style="text-align: center; color: #999; font-size: 16px;"),
@@ -6116,7 +6223,7 @@ with ui.tags.div(id="mainContent", class_="main-content"):
                                 result = thematic_map_results.get()
                                 if result is not None:
                                     _, _, thematic_map_table, _, _ = result
-                                    return ui.HTML(DT(thematic_map_table, style="width=100%;"))
+                                    return ui.HTML(DT(thematic_map_table, style="width:100%;"))
                                 else:
                                     return ui.div(
                                         ui.p("Click the Run Analysis button to run thematic map", style="text-align: center; color: #999; font-size: 16px;"),
@@ -6129,7 +6236,7 @@ with ui.tags.div(id="mainContent", class_="main-content"):
                                 result = thematic_map_results.get()
                                 if result is not None:
                                     _, _, _, thematic_map_cluster, _ = result
-                                    return ui.HTML(DT(thematic_map_cluster, style="width=100%;"))
+                                    return ui.HTML(DT(thematic_map_cluster, style="width:100%;"))
                                 else:
                                     return ui.div(
                                         ui.p("Click the Run Analysis button to run thematic map", style="text-align: center; color: #999; font-size: 16px;"),
@@ -6142,7 +6249,7 @@ with ui.tags.div(id="mainContent", class_="main-content"):
                                 result = thematic_map_results.get()
                                 if result is not None:
                                     _, _, _, _, thematic_map_documents = result
-                                    return ui.HTML(DT(thematic_map_documents, maxBytes="10MB", style="width=100%;"))
+                                    return ui.HTML(DT(thematic_map_documents, maxBytes="10MB", style="width:100%;"))
                                 else:
                                     return ui.div(
                                         ui.p("Click the Run Analysis button to run thematic map", style="text-align: center; color: #999; font-size: 16px;"),
@@ -6444,7 +6551,7 @@ with ui.tags.div(id="mainContent", class_="main-content"):
                                             result = thematic_evolution_results.get()
                                             if result is not None:
                                                 _, thematic_evolution_table, _ = result
-                                                return ui.HTML(DT(thematic_evolution_table, style="width=100%;"))
+                                                return ui.HTML(DT(thematic_evolution_table, style="width:100%;"))
                                             else:
                                                 return ui.div(
                                                     ui.p("Click the Run Analysis button to run thematic evolution", style="text-align: center; color: #999; font-size: 16px;"),
@@ -6483,7 +6590,7 @@ with ui.tags.div(id="mainContent", class_="main-content"):
                                                 if result is not None:
                                                     _, _, TM = result
                                                     if len(TM) > 0:
-                                                        return ui.HTML(DT(TM[0]["words"], style="width=100%;"))
+                                                        return ui.HTML(DT(TM[0]["words"], style="width:100%;"))
                                                 return ui.div(
                                                     ui.p("Click the Run Analysis button to run thematic evolution", style="text-align: center; color: #999; font-size: 16px;"),
                                                     style="display: flex; flex-direction: column; justify-content: center; align-items: center; height: 300px; border: 2px dashed #ddd; border-radius: 10px; margin: 20px;"
@@ -6496,7 +6603,7 @@ with ui.tags.div(id="mainContent", class_="main-content"):
                                                 if result is not None:
                                                     _, _, TM = result
                                                     if len(TM) > 0:
-                                                        return ui.HTML(DT(TM[0]["clusters"], style="width=100%;"))
+                                                        return ui.HTML(DT(TM[0]["clusters"], style="width:100%;"))
                                                 return ui.div(
                                                     ui.p("Click the Run Analysis button to run thematic evolution", style="text-align: center; color: #999; font-size: 16px;"),
                                                     style="display: flex; flex-direction: column; justify-content: center; align-items: center; height: 300px; border: 2px dashed #ddd; border-radius: 10px; margin: 20px;"
@@ -6509,7 +6616,7 @@ with ui.tags.div(id="mainContent", class_="main-content"):
                                                 if result is not None:
                                                     _, _, TM = result
                                                     if len(TM) > 0:
-                                                        return ui.HTML(DT(TM[0]["documentToClusters"], maxBytes="10MB", style="width=100%;"))
+                                                        return ui.HTML(DT(TM[0]["documentToClusters"], maxBytes="10MB", style="width:100%;"))
                                                 return ui.div(
                                                     ui.p("Click the Run Analysis button to run thematic evolution", style="text-align: center; color: #999; font-size: 16px;"),
                                                     style="display: flex; flex-direction: column; justify-content: center; align-items: center; height: 300px; border: 2px dashed #ddd; border-radius: 10px; margin: 20px;"
@@ -6547,7 +6654,7 @@ with ui.tags.div(id="mainContent", class_="main-content"):
                                                 if result is not None:
                                                     _, _, TM = result
                                                     if len(TM) > 1:
-                                                        return ui.HTML(DT(TM[1]["words"], style="width=100%;"))
+                                                        return ui.HTML(DT(TM[1]["words"], style="width:100%;"))
                                                 return ui.div(
                                                     ui.p("Click the Run Analysis button to run thematic evolution", style="text-align: center; color: #999; font-size: 16px;"),
                                                     style="display: flex; flex-direction: column; justify-content: center; align-items: center; height: 300px; border: 2px dashed #ddd; border-radius: 10px; margin: 20px;"
@@ -6560,7 +6667,7 @@ with ui.tags.div(id="mainContent", class_="main-content"):
                                                 if result is not None:
                                                     _, _, TM = result
                                                     if len(TM) > 1:
-                                                        return ui.HTML(DT(TM[1]["clusters"], style="width=100%;"))
+                                                        return ui.HTML(DT(TM[1]["clusters"], style="width:100%;"))
                                                 return ui.div(
                                                     ui.p("Click the Run Analysis button to run thematic evolution", style="text-align: center; color: #999; font-size: 16px;"),
                                                     style="display: flex; flex-direction: column; justify-content: center; align-items: center; height: 300px; border: 2px dashed #ddd; border-radius: 10px; margin: 20px;"
@@ -6573,7 +6680,7 @@ with ui.tags.div(id="mainContent", class_="main-content"):
                                                 if result is not None:
                                                     _, _, TM = result
                                                     if len(TM) > 1:
-                                                        return ui.HTML(DT(TM[1]["documentToClusters"], maxBytes="10MB", style="width=100%;"))
+                                                        return ui.HTML(DT(TM[1]["documentToClusters"], maxBytes="10MB", style="width:100%;"))
                                                 return ui.div(
                                                     ui.p("Click the Run Analysis button to run thematic evolution", style="text-align: center; color: #999; font-size: 16px;"),
                                                     style="display: flex; flex-direction: column; justify-content: center; align-items: center; height: 300px; border: 2px dashed #ddd; border-radius: 10px; margin: 20px;"
@@ -6611,7 +6718,7 @@ with ui.tags.div(id="mainContent", class_="main-content"):
                                                 if result is not None:
                                                     _, _, TM = result
                                                     if len(TM) > 2:
-                                                        return ui.HTML(DT(TM[2]["words"], style="width=100%;"))
+                                                        return ui.HTML(DT(TM[2]["words"], style="width:100%;"))
                                                 return ui.div(
                                                     ui.p("Click the Run Analysis button to run thematic evolution", style="text-align: center; color: #999; font-size: 16px;"),
                                                     style="display: flex; flex-direction: column; justify-content: center; align-items: center; height: 300px; border: 2px dashed #ddd; border-radius: 10px; margin: 20px;"
@@ -6624,7 +6731,7 @@ with ui.tags.div(id="mainContent", class_="main-content"):
                                                 if result is not None:
                                                     _, _, TM = result
                                                     if len(TM) > 2:
-                                                        return ui.HTML(DT(TM[2]["clusters"], style="width=100%;"))
+                                                        return ui.HTML(DT(TM[2]["clusters"], style="width:100%;"))
                                                 return ui.div(
                                                     ui.p("Click the Run Analysis button to run thematic evolution", style="text-align: center; color: #999; font-size: 16px;"),
                                                     style="display: flex; flex-direction: column; justify-content: center; align-items: center; height: 300px; border: 2px dashed #ddd; border-radius: 10px; margin: 20px;"
@@ -6637,7 +6744,7 @@ with ui.tags.div(id="mainContent", class_="main-content"):
                                                 if result is not None:
                                                     _, _, TM = result
                                                     if len(TM) > 2:
-                                                        return ui.HTML(DT(TM[2]["documentToClusters"], maxBytes="10MB", style="width=100%;"))
+                                                        return ui.HTML(DT(TM[2]["documentToClusters"], maxBytes="10MB", style="width:100%;"))
                                                 return ui.div(
                                                     ui.p("Click the Run Analysis button to run thematic evolution", style="text-align: center; color: #999; font-size: 16px;"),
                                                     style="display: flex; flex-direction: column; justify-content: center; align-items: center; height: 300px; border: 2px dashed #ddd; border-radius: 10px; margin: 20px;"
@@ -6675,7 +6782,7 @@ with ui.tags.div(id="mainContent", class_="main-content"):
                                                 if result is not None:
                                                     _, _, TM = result
                                                     if len(TM) > 3:
-                                                        return ui.HTML(DT(TM[3]["words"], style="width=100%;"))
+                                                        return ui.HTML(DT(TM[3]["words"], style="width:100%;"))
                                                 return ui.div(
                                                     ui.p("Click the Run Analysis button to run thematic evolution", style="text-align: center; color: #999; font-size: 16px;"),
                                                     style="display: flex; flex-direction: column; justify-content: center; align-items: center; height: 300px; border: 2px dashed #ddd; border-radius: 10px; margin: 20px;"
@@ -6688,7 +6795,7 @@ with ui.tags.div(id="mainContent", class_="main-content"):
                                                 if result is not None:
                                                     _, _, TM = result
                                                     if len(TM) > 3:
-                                                        return ui.HTML(DT(TM[3]["clusters"], style="width=100%;"))
+                                                        return ui.HTML(DT(TM[3]["clusters"], style="width:100%;"))
                                                 return ui.div(
                                                     ui.p("Click the Run Analysis button to run thematic evolution", style="text-align: center; color: #999; font-size: 16px;"),
                                                     style="display: flex; flex-direction: column; justify-content: center; align-items: center; height: 300px; border: 2px dashed #ddd; border-radius: 10px; margin: 20px;"
@@ -6701,7 +6808,7 @@ with ui.tags.div(id="mainContent", class_="main-content"):
                                                 if result is not None:
                                                     _, _, TM = result
                                                     if len(TM) > 3:
-                                                        return ui.HTML(DT(TM[3]["documentToClusters"], maxBytes="10MB", style="width=100%;"))
+                                                        return ui.HTML(DT(TM[3]["documentToClusters"], maxBytes="10MB", style="width:100%;"))
                                                 return ui.div(
                                                     ui.p("Click the Run Analysis button to run thematic evolution", style="text-align: center; color: #999; font-size: 16px;"),
                                                     style="display: flex; flex-direction: column; justify-content: center; align-items: center; height: 300px; border: 2px dashed #ddd; border-radius: 10px; margin: 20px;"
@@ -6739,7 +6846,7 @@ with ui.tags.div(id="mainContent", class_="main-content"):
                                                 if result is not None:
                                                     _, _, TM = result
                                                     if len(TM) > 4:
-                                                        return ui.HTML(DT(TM[4]["words"]), style="width=100%;")
+                                                        return ui.HTML(DT(TM[4]["words"]), style="width:100%;")
                                                 return ui.div(
                                                     ui.p("Click the Run Analysis button to run thematic evolution", style="text-align: center; color: #999; font-size: 16px;"),
                                                     style="display: flex; flex-direction: column; justify-content: center; align-items: center; height: 300px; border: 2px dashed #ddd; border-radius: 10px; margin: 20px;"
@@ -6752,7 +6859,7 @@ with ui.tags.div(id="mainContent", class_="main-content"):
                                                 if result is not None:
                                                     _, _, TM = result
                                                     if len(TM) > 4:
-                                                        return ui.HTML(DT(TM[4]["clusters"], style="width=100%;"))
+                                                        return ui.HTML(DT(TM[4]["clusters"], style="width:100%;"))
                                                 return ui.div(
                                                     ui.p("Click the Run Analysis button to run thematic evolution", style="text-align: center; color: #999; font-size: 16px;"),
                                                     style="display: flex; flex-direction: column; justify-content: center; align-items: center; height: 300px; border: 2px dashed #ddd; border-radius: 10px; margin: 20px;"
@@ -6765,7 +6872,7 @@ with ui.tags.div(id="mainContent", class_="main-content"):
                                                 if result is not None:
                                                     _, _, TM = result
                                                     if len(TM) > 4:
-                                                        return ui.HTML(DT(TM[4]["documentToClusters"], maxBytes="10MB", style="width=100%;"))
+                                                        return ui.HTML(DT(TM[4]["documentToClusters"], maxBytes="10MB", style="width:100%;"))
                                                 return ui.div(
                                                     ui.p("Click the Run Analysis button to run thematic evolution", style="text-align: center; color: #999; font-size: 16px;"),
                                                     style="display: flex; flex-direction: column; justify-content: center; align-items: center; height: 300px; border: 2px dashed #ddd; border-radius: 10px; margin: 20px;"
@@ -7051,7 +7158,7 @@ with ui.tags.div(id="mainContent", class_="main-content"):
                                 result = factorial_analysis_results.get()
                                 if result is not None:
                                     _, _, words_by_cluster, _ = result
-                                    return ui.HTML(DT(words_by_cluster, style="width=100%;"))
+                                    return ui.HTML(DT(words_by_cluster, style="width:100%;"))
                                 else:
                                     return ui.div(
                                         ui.p("Click the Run Analysis button to run factorial analysis", style="text-align: center; color: #999; font-size: 16px;"),
@@ -7064,7 +7171,7 @@ with ui.tags.div(id="mainContent", class_="main-content"):
                                 result = factorial_analysis_results.get()
                                 if result is not None:
                                     _, _, _, articles_by_cluster = result
-                                    return ui.HTML(DT(articles_by_cluster, style="width=100%;"))
+                                    return ui.HTML(DT(articles_by_cluster, style="width:100%;"))
                                 else:
                                     return ui.div(
                                         ui.p("Click the Run Analysis button to run factorial analysis", style="text-align: center; color: #999; font-size: 16px;"),
@@ -7345,7 +7452,7 @@ with ui.tags.div(id="mainContent", class_="main-content"):
                                 result = co_citation_network_results.get()
                                 if result is not None:
                                     _, _, cocit_table, _ = result
-                                    return ui.HTML(DT(cocit_table, style="width=100%;"))
+                                    return ui.HTML(DT(cocit_table, style="width:100%;"))
                                 else:
                                     return ui.div(
                                         ui.p("Click the Run Analysis button to generate the co-citation table.", style="text-align: center; color: #666; font-size: 16px;"),
@@ -7560,7 +7667,7 @@ with ui.tags.div(id="mainContent", class_="main-content"):
                                 result = historiograph_results.get()
                                 if result is not None:
                                     _, hist_tab, _ = result
-                                    return ui.HTML(DT(hist_tab, style="width=100%;"))
+                                    return ui.HTML(DT(hist_tab, style="width:100%;"))
                                 else:
                                     return ui.div(
                                         ui.p("Click the Run Analysis button to generate the historiograph table.", style="text-align: center; color: #666; font-size: 16px;"),
@@ -7865,7 +7972,7 @@ with ui.tags.div(id="mainContent", class_="main-content"):
                                 result = collaboration_network_results.get()
                                 if result is not None:
                                     _, _, collab_table, _ = result
-                                    return ui.HTML(DT(collab_table, style="width=100%;"))
+                                    return ui.HTML(DT(collab_table, style="width:100%;"))
                                 else:
                                     return ui.div(
                                         ui.p("Click the Run Analysis button to generate the collaboration table.", style="text-align: center; color: #666; font-size: 16px;"),
@@ -8045,7 +8152,7 @@ with ui.tags.div(id="mainContent", class_="main-content"):
                                 result = countries_collaboration_network_results.get()
                                 if result is not None:
                                     _, world_map_table = result
-                                    return ui.HTML(DT(world_map_table, style="width=100%;"))
+                                    return ui.HTML(DT(world_map_table, style="width:100%;"))
                                 else:
                                     return ui.div(
                                         ui.p("Click the Run Analysis button to generate the world map collaboration table.", style="text-align: center; color: #666; font-size: 16px;"),

@@ -1,0 +1,22 @@
+======================================================================
+  BIBLIOMETRIX PYTHON PORT - ADVANCED ETL PIPELINE EXECUTION LOG
+======================================================================
+
+[Pipeline] Starting Advanced ETL for platform: OPENALEX
+[Pipeline] Search Query: 'machine learning' | Targeting up to 50 records.
+------------------------------------------------------------
+[Extract] Fetched page 1, accumulated 25 raw records.
+[Extract] Fetched page 2, accumulated 50 raw records.
+[Pipeline] Transform phase complete. Structural DataFrame initialized.
+[Calculated Fields] Generating Short Reference (SR) keys...
+[Validation] Success! Passed all schema, nullability, and contract checks for 50 rows.
+------------------------------------------------------------
+[Pipeline] SUCCESS: Standardized DataFrame is completely ready for analytical functions.
+
+======================================================================
+[Success] Fully linked and protected DataFrame shape: (50, 24)
+======================================================================
+
+------------------------------------------------------------
+[Load] Standardized dataset successfully linked and saved to: standardized_openalex_output.xlsx
+------------------------------------------------------------

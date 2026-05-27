@@ -34,7 +34,7 @@ def histNetwork(df, min_citations=0, sep=";", network=True):
     # Fill missing values in TC
     M['TC'] = M['TC'].fillna(0)
 
-    if db == "Web_of_Science":
+    if db in ["Web_of_Science", "ISI"]:
         results = wos(M, min_citations=min_citations, sep=sep, network=network)
     elif db == "Scopus":
         results = scopus(M, min_citations=min_citations, sep=sep, network=network)
